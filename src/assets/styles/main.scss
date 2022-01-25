@@ -1,0 +1,14 @@
+@use 'tailwind';
+@use 'elements';
+
+.\! {
+  @apply border-1 border-red-600
+}
+
+.\!\! {
+  @apply border-1 border-green-600
+}
+
+.\!\!\! {
+  @apply border-1 border-blue-600
+}
