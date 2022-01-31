@@ -1,6 +1,6 @@
 <template>
   <div class="pagination flex flex-col items-center py-8">
-    <div class="flex text-gray-700" v-if="userFile && pages.length">
+    <div class="flex text-gray-700" v-if="filePageCount && pages.length">
       <router-link class="h-8 w-8 flex justify-center items-center cursor-pointer" :to="`?page=${0}`">
         <ChevronDoubleLeftIcon class="h-5 pt-1 mr-1" />
       </router-link>
@@ -31,7 +31,7 @@
       <router-link class="h-8 w-8 flex justify-center items-center cursor-pointer" :to="`?page=${nextPage}`">
         <ChevronRightIcon class="h-5 pt-1 ml-1" />
       </router-link>
-      <router-link class="h-8 w-8 flex justify-center items-center cursor-pointer" :to="`?page=${userFilePageCount}`">
+      <router-link class="h-8 w-8 flex justify-center items-center cursor-pointer" :to="`?page=${filePageCount}`">
         <ChevronDoubleRightIcon class="h-5 pt-1 mr-1" />
       </router-link>
     </div>
@@ -52,13 +52,12 @@ import {
 const store = useStore()
 const route = useRoute()
 
-const userFile = computed(() => store.state.app.userFile)
-const userFilePageCount = computed(() => store.getters['app/userFilePageCount'])
 const userPage = computed(() => route.query.page || '0')
+const filePageCount = computed(() => store.getters['app/filePageCount'])
 
 const pages = computed(() => {
   const page = userPage.value
-  const max = userFilePageCount.value
+  const max = filePageCount.value
 
   let min = 0
   let pages = 5
@@ -81,7 +80,7 @@ const prevPage = computed(() => {
 })
 
 const nextPage = computed(() => {
-  return userPage.value < userFilePageCount.value
+  return userPage.value < filePageCount.value
     ? +userPage.value + 1
     : userPage.value
 })

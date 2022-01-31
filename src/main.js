@@ -6,3 +6,5 @@ import '@/assets/styles/main.scss'
 import router from './router'
 
 createApp(App).use(router).use(store).mount('#app')
+
+window.$worker = new Worker('./worker.js')

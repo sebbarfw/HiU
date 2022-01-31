@@ -19,12 +19,14 @@
 
     <Pagination />
 
-    <pre v-if="userFile"
+    <div v-if="fileWordsLoading">Loading... {{ fileWordsLoading }}%</div>
+
+    <pre v-if="!fileWordsLoading && hasFile"
       class="max-w-screen-lg text-left break-words whitespace-pre-wrap"
-      v-html="userFilePageContentProcessed || '(empty)'"
+      v-html="filePageContentHighlighted || '(empty)'"
     />
 
-    <Pagination />
+    <Pagination @click="handleScrollToTop" />
   </div>
 </template>
 
@@ -40,21 +42,22 @@ const store = useStore()
 const route = useRoute()
 
 const userPage = computed(() => route.query.page || 0)
-const userFile = computed(() => store.state.app.userFile)
+const hasFile = computed(() => 'size' in store.state.app.fileMeta)
+const filePageContentHighlighted = computed(() => store.getters['app/filePageContentHighlighted'])
+const fileWordsLoading = computed(() => store.state.app.fileWordsLoading)
 const userFoobarHighlighting = computed(() => store.state.app.userFoobarHighlighting)
-const userFilePageContentProcessed = computed(() => store.getters['app/userFilePageContentProcessed'])
-
-// store.dispatch('app/tempFetch')
 
 watch(userPage, () => {
-  store.dispatch('app/extractUserFileContent')
+  store.dispatch('app/getFileChunk')
+})
 
+function handleScrollToTop () {
   window.scrollTo({
     top: 0,
     left: 0,
-    behavior: 'smooth'
+    behavior: 'smooth',
   })
-})
+}
 
 function handleFileDrop (files) {
   const [file] = files || [] // first file only

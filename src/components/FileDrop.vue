@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineEmits, defineProps } from 'vue'
+import { ref, computed } from 'vue'
 import { useEventListener } from '@/composables/useEventListener'
 import dayjs from 'dayjs'
 import dayjsCalendar from 'dayjs/plugin/calendar'
@@ -42,8 +42,8 @@ dayjs.extend(dayjsCalendar)
 import { XIcon } from '@heroicons/vue/solid'
 
 // init
-const emit = defineEmits(['drop', 'remove'])
-const props = defineProps({
+const emit = defineEmits(['drop', 'remove']) // eslint-disable-line no-undef
+const props = defineProps({ // eslint-disable-line
   fileSizeLimit: {
     type: [Number, String],
     default: Infinity, // FIXME: withDefaults()
