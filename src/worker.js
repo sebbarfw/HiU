@@ -14,7 +14,8 @@ self.onmessage = async (e) => {
   switch (type) {
     case 'getFileWords':
       state.file = payload // save for future use
-      return self.postMessage({ type, payload: await getFileWords() })
+      state.frequency = new Map()
+      return self.postMessage({ type, payload: await getFileWords(payload) })
     case 'getFileChunk': {
       return self.postMessage({ type, payload: await getFileChunk(payload) })
     }
@@ -34,10 +35,9 @@ async function getFileChunk({ start, end }) {
   })
 }
 
-function getFileWords () {
+function getFileWords (blob) {
   return new Promise((resolve, reject) => {
-    if (!state.file) return resolve(null)
-    const blob = state.file
+    if (!blob) return resolve(null)
     const reader = new FileLineStreamer()
 
     reader.open(blob, (lines, error) => {

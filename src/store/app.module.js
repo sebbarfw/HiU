@@ -7,7 +7,6 @@ const state = {
   fileWordsLoading: null,
   filePageSize: 1024 * 3, // blob chunk size
   filePageContent: '',
-  filePageHighlight: null,
   userFoobarHighlighting: false,
 }
 
@@ -56,6 +55,9 @@ const actions = {
       page: undefined,
     }
     await router.push({ query })
+    await commit('setFileWords', null)
+    await commit('setFilePageContent', '')
+
     await commit('setFileMeta', meta)
     await dispatch('getFileWords', file)
     await dispatch('getFileChunk')
